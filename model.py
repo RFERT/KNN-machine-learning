@@ -1,6 +1,29 @@
 import pandas as pd
 from pandas import DataFrame, Series
 
+class utils:
+
+    @staticmethod
+    def evaluate(self, X_test, y_test):
+        """
+        evaluate the model accuracy
+        """
+        y_pred = self.predict(X_test=X_test)
+        score = 0
+        for i in range(len(y_pred)):
+            score += 1 if y_pred[i] == y_test[i] else 0
+        return score/len(y_pred)
+    
+    @staticmethod
+    def grid_search(self, X_valid, y_valid):
+        self.k_scores += [self.evaluate(X_test=X_valid, y_test=y_valid)]    # Load the K score in the attribute to use it just after
+        self.k_neighbours += 2      # Increment by 2 to test the next odd value (odd to avoid equalities in the neighbours max count)
+        if self.evaluate(X_test=X_valid, y_test=y_valid) > self.k_scores[-1]:
+            self.grid_search(X_valid, y_valid)      # if we didn't see the lowing value we continue the process (recursive 👈😁👆)
+        else:
+            self.k_neighbours -= 2                  # if we saw the lowing value we come back to the perfect one and then announce this to the happy user (nice guy is there)
+            print(f"k-value found: {self.k_neighbours}")    # Hope he's gona be soooo happy
+            
 class KNN:
     def __init__(self):
         self.k_neighbours = 1
@@ -66,23 +89,6 @@ class KNN:
             sorted.append(tab.pop(indexes[-1]))
         return sorted, indexes
     
-    def evaluate(self, X_test, y_test):
-        """
-        evaluate the model accuracy
-        """
-        y_pred = self.predict(X_test=X_test)
-        score = 0
-        for i in range(len(y_pred)):
-            score += 1 if y_pred[i] == y_test[i] else 0
-        return score/len(y_pred)
     
-    def grid_search(self, X_valid, y_valid):
-        self.k_scores += [self.evaluate(X_test=X_valid, y_test=y_valid)]    # Load the K score in the attribute to use it just after
-        self.k_neighbours += 2      # Increment by 2 to test the next odd value (odd to avoid equalities in the neighbours max count)
-        if self.evaluate(X_test=X_valid, y_test=y_valid) > self.k_scores[-1]:
-            self.grid_search(X_valid, y_valid)      # if we didn't see the lowing value we continue the process (recursive 👈😁👆)
-        else:
-            self.k_neighbours -= 2                  # if we saw the lowing value we come back to the perfect one and then announce this to the happy user (nice guy is there)
-            print(f"k-value found: {self.k_neighbours}")    # Hope he's gona be soooo happy
 
 # Please excuse me for the 2 AM comments ;)
